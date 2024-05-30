@@ -6,18 +6,34 @@ package org.aph
 class WorkDialogService {
     private var dialog: TextDisplay? = null
     fun open(title: String, message: String) {
-        dialog = TextDisplay()
-        dialog.title = title
-        dialog.message = message
-        dialog.show()
+        /*
+         * Possible solutions may have included:
+         *  1. Non-null assertion operator (!!). Whilst making the compiler quiet does not fix possible issues and does not improve safety. It relies upon your reasoning to prevent errors.
+         * 2. Make dialog lateinit. Not really suitable here as close sets dialog to null. Also, lateinit would not protect should there be incorrect use such as doWork being called before open.
+         * 3. Create temp local variable for set up and after configuring set dialog from temp variable. This solves the issue as the local variable can be defined as non-null.
+         * 4. Use scoping functions. Same idea as the local variable but more compact. This is the selected solution, using apply here but also may be used if you prefer having the object as a parameter to the block.
+         */
+        dialog = TextDisplay().apply {
+            this.title = title
+            this.message = message
+            show()
+        }
     }
 
     fun doWork(work: ((Int) -> Unit) -> Unit) {
-        work { dialog.progressUpdate(it) }
+        /*
+         * Possible solutions:
+         * 1. Non-null assertion operator (!!). This does not solve the issue and errors could still occur if API used incorrectly, such as doWork being called before open.
+         * 2. Safe call operator (#.). This is the preferred solution if no exception is to be thrown, the call will be made if dialog is not null, otherwise the call is not made.
+         */
+        work { dialog?.progressUpdate(it) }
     }
 
     fun close() {
-        dialog.done()
+        /*
+         * Possible solutions are the same as in doWork and the preferred solution is the same.
+         */
+        dialog?.done()
         dialog = null
     }
 }
