@@ -14,4 +14,19 @@ class WorkDialogServiceTest {
         }
         workDialog.close()
     }
+    @Test fun callingDoWorkBeforeOpen() {
+        val workDialog = WorkDialogService()
+        workDialog.doWork { it(100) }
+    }
+    @Test fun callCloseBeforeOpen() {
+        val workDialogService = WorkDialogService()
+        workDialogService.close()
+    }
+    @Test fun callCloseTwice() {
+        val workDialog = WorkDialogService()
+        workDialog.open(title = "Test title", message = "Test message")
+        workDialog.doWork { it(50) }
+        workDialog.close()
+        workDialog.close()
+    }
 }
