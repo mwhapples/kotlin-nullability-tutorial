@@ -4,10 +4,9 @@
 package org.aph
 
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 class WorkDialogServiceTest {
-    @Test fun normalWork)flow() {
+    @Test fun normalWorkFlow() {
         val workDialog = WorkDialogService()
         workDialog.open(title = "Test title", message = "Test message")
         workDialog.doWork { updater ->
