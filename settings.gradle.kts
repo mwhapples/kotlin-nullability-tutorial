@@ -12,4 +12,4 @@ plugins {
 }
 
 rootProject.name = "kotlin-nullability-tutorial"
-include("example1")
+include("example1", "example2")
