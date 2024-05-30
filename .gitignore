@@ -6,3 +6,6 @@ build
 
 # ignore kotlin directory
 .kotlin
+
+#Ignore IDEA directory
+.idea/
