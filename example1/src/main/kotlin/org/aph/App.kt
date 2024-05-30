@@ -3,13 +3,54 @@
  */
 package org.aph
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
+class WorkDialogService {
+    private var dialog: TextDisplay? = null
+    fun open(title: String, message: String) {
+        dialog = TextDisplay()
+        dialog.title = title
+        dialog.message = message
+        dialog.show()
+    }
+
+    fun doWork(work: ((Int) -> Unit) -> Unit) {
+        work { dialog.progressUpdate(it) }
+    }
+
+    fun close() {
+        dialog.done()
+        dialog = null
+    }
 }
 
 fun main() {
-    println(App().greeting)
+    val workDialog = WorkDialogService()
+    workDialog.open(title = "Demo work", message = "Starting the long task")
+    workDialog.doWork { updater ->
+        for (i in 0..100 step 10) {
+            updater(i)
+            Thread.sleep(1000)
+        }
+    }
+    workDialog.close()
+}
+
+/*
+ * For the purposes of this example treat the following class as if it comes from a third party library and so should
+ * not be changed.
+ */
+private class TextDisplay {
+    var title: String = ""
+    var message: String = ""
+    fun show() {
+        println("     $title")
+        println(message)
+    }
+
+    fun progressUpdate(progress: Int) {
+        println("Working $progress%")
+    }
+
+    fun done() {
+        println("Done")
+    }
 }

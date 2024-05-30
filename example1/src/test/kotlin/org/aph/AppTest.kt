@@ -6,9 +6,13 @@ package org.aph
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
-class AppTest {
-    @Test fun appHasAGreeting() {
-        val classUnderTest = App()
-        assertNotNull(classUnderTest.greeting, "app should have a greeting")
+class WorkDialogServiceTest {
+    @Test fun normalWork)flow() {
+        val workDialog = WorkDialogService()
+        workDialog.open(title = "Test title", message = "Test message")
+        workDialog.doWork { updater ->
+            updater(100)
+        }
+        workDialog.close()
     }
 }
